@@ -78,6 +78,42 @@ public class ParameterizedTestTest {
 		assertEquals("[0]", description.getChildren().get(0).getDisplayName());
 	}
 
+	@RunWith(Parameterized.class)
+	static public class ExtendedParameters extends FibonacciTest {
+		public ExtendedParameters(int input, int expected) {
+			super(input, expected);
+		}
+	}
+
+	@Test
+	public void runsExtendedParametersClass() {
+		Result result= JUnitCore.runClasses(ExtendedParameters.class);
+		assertEquals(7, result.getRunCount());
+		assertEquals(6, result.getFailureCount());
+	}
+
+	@RunWith(Parameterized.class)
+	static public class OverriddenParameters extends FibonacciTest {
+		public OverriddenParameters(int input, int expected) {
+			super(input, expected);
+		}
+		@Parameters
+		public static Collection<Object[]> data() {
+			return Arrays.asList(new Object[][] { { 0, 0 }, { 1, 1 } });
+		}
+		@Parameters
+		public static Collection<Object[]> moreData() {
+			return Arrays.asList(new Object[][] { { 0, 0 }, { 1, 1 }, { 2, 1 } });
+		}
+	}
+
+	@Test
+	public void runsOverriddenParametersClass() {
+		Result result= JUnitCore.runClasses(OverriddenParameters.class);
+		assertEquals(2, result.getRunCount());
+		assertEquals(1, result.getFailureCount());
+	}
+
 	private static String fLog;
 
 	@RunWith(Parameterized.class)
@@ -130,6 +166,30 @@ public class ParameterizedTestTest {
 	public void validateClassCatchesNoParameters() {
 		Result result= JUnitCore.runClasses(EmptyTest.class);
 		assertEquals(1, result.getFailureCount());
+	}
+
+	@RunWith(Parameterized.class)
+	static public class MultipleParametersMethods {
+		@Test
+		public int test() {
+			return 0;
+		}
+
+		@Parameters
+		public static Collection<Object[]> data() {
+			return Arrays.asList(new Object[][] { { 0 } });
+		}
+
+		@Parameters
+		public static Collection<Object[]> moreData() {
+			return Arrays.asList(new Object[][] { { 0 }, { 0 } });
+		}
+	}
+
+	@Test
+	public void firstParametersMethodUsed() {
+		Result result= JUnitCore.runClasses(MultipleParametersMethods.class);
+		assertEquals(1, result.getRunCount());
 	}
 
 	@RunWith(Parameterized.class)
