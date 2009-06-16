@@ -68,7 +68,7 @@ public class Parameterized extends Suite {
 	public static @interface Parameters {
 	}
 
-	private class TestClassRunnerForParameters extends
+	protected class TestClassRunnerForParameters extends
 			BlockJUnit4ClassRunner {
 		private final int fParameterSetNumber;
 
@@ -139,7 +139,7 @@ public class Parameterized extends Suite {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Object[]> getParametersList(TestClass klass)
+	protected List<Object[]> getParametersList(TestClass klass)
 			throws Throwable {
 		return (List<Object[]>) getParametersMethod(klass).invokeExplosively(
 				null);
