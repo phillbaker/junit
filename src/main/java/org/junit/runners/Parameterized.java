@@ -55,7 +55,19 @@ import org.junit.runners.model.TestClass;
  * <p>
  * Each instance of <code>FibonacciTest</code> will be constructed using the
  * two-argument constructor and the data values in the
- * <code>&#064;Parameters</code> method.
+ * <code>&#064;Parameters</code> method.  If multiple methods in a class or
+ * any of its superclasses are annotated:
+ * <ul>
+ * <li>Inherited methods do not need to be repeated, but may be overridden.</li>
+ * <li>The first one in a class file is given preference.</li>
+ * <li>Overridden inherited methods are given preference over declared
+ * methods.</li>
+ * <li>Declared methods are given preference over inherited methods 
+ * that have not been overridden.</li>
+ * </ul>
+ * 
+ * The <code>&#064;Parameters</code> method is
+ * called before any <code>&#064;BeforeClass</code> methods.
  * </p>
  */
 public class Parameterized extends Suite {
@@ -123,15 +135,28 @@ public class Parameterized extends Suite {
 	private final ArrayList<Runner> runners= new ArrayList<Runner>();
 
 	/**
-	 * Only called reflectively. Do not use programmatically.
+	 * Only called reflectively. Do not use programmatically. Initializes
+   * one runner for each test for each set of parameters.
 	 */
 	public Parameterized(Class<?> klass) throws Throwable {
-		super(klass, Collections.<Runner>emptyList());
+		this(klass, Collections.<Runner>emptyList());
 		List<Object[]> parametersList= getParametersList(getTestClass());
 		for (int i= 0; i < parametersList.size(); i++)
 			runners.add(new TestClassRunnerForParameters(getTestClass().getJavaClass(),
 					parametersList, i));
 	}
+
+  /**
+   * Called by this class and subclasses once the runners making 
+   * up the suite have been determined. Avoids runner initialization.
+   * 
+   * @param klass root of the suite
+   * @param runners for each class in the suite, a {@link Runner}
+   * @throws Throwable 
+   */
+  protected Parameterized(Class<?> klass, List<Runner> runners) throws Throwable {
+  	super(klass, runners);
+  }
 
 	@Override
 	protected List<Runner> getChildren() {

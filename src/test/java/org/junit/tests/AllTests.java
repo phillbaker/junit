@@ -45,6 +45,7 @@ import org.junit.tests.listening.UserStopTest;
 import org.junit.tests.manipulation.FilterableTest;
 import org.junit.tests.manipulation.SingleMethodTest;
 import org.junit.tests.manipulation.SortableTest;
+import org.junit.tests.running.classes.DependentParameterizedTestTest;
 import org.junit.tests.running.classes.EnclosedTest;
 import org.junit.tests.running.classes.IgnoreClassTest;
 import org.junit.tests.running.classes.ParameterizedTestTest;
@@ -86,6 +87,7 @@ import org.junit.tests.validation.ValidationTest;
 	ForwardCompatibilityTest.class,
 	OldTests.class,
 	ParameterizedTestTest.class,
+	DependentParameterizedTestTest.class,
 	RunWithTest.class,
 	RunnerTest.class,
 	SuiteTest.class,
