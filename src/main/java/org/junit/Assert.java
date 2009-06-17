@@ -1,12 +1,15 @@
 package org.junit;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.junit.internal.ArrayComparisonFailure;
 import org.junit.internal.ExactComparisonCriteria;
 import org.junit.internal.InexactComparisonCriteria;
+import org.junit.runner.notification.RunListener;
 
 /**
  * A set of assertion methods useful for writing tests. Only failed assertions
@@ -23,6 +26,7 @@ import org.junit.internal.InexactComparisonCriteria;
  * @see AssertionError
  */
 public class Assert {
+	private final List<AssertionListener> fListeners= new ArrayList<AssertionListener>();
 	/**
 	 * Protect constructor since it is a static only class
 	 */
