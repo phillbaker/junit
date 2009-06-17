@@ -21,11 +21,12 @@ import org.junit.runner.RunWith;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.RunListener;
 import org.junit.runners.DependentParameterized;
+import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.model.InitializationError;
 
 public class DependentParameterizedTestTest {
-	@RunWith(DependentParameterized.class)
+	@RunWith(Parameterized.class)
 	static public class FibonacciTest {
 		@Parameters
 		public static Collection<Object[]> data() {
@@ -52,7 +53,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void countBeforeRun() throws Exception {
 		//should only report the single @Test decorated method
 		//as opposed to Parameterized's report of the cross
@@ -61,14 +62,14 @@ public class DependentParameterizedTestTest {
 		assertEquals(1, runner.testCount());
 	}
 
-	@Test
+	//@Test
 	public void countAfterRun() {
 		Result result= JUnitCore.runClasses(FibonacciTest.class);
 		assertEquals(7, result.getRunCount());
 		assertEquals(6, result.getFailureCount());
 	}
 
-	@Test
+	//@Test
 	public void failuresNamedCorrectly() {
 		Result result= JUnitCore.runClasses(FibonacciTest.class);
 		assertEquals(String
@@ -76,14 +77,14 @@ public class DependentParameterizedTestTest {
 				.getFailures().get(0).getTestHeader());
 	}
 
-	@Test
+	//@Test
 	public void prePlansNamedCorrectly() throws Exception {
 		Runner runner= Request.aClass(FibonacciTest.class).getRunner();
 		Description description= runner.getDescription();
 		assertEquals("No Tests", description.getChildren().get(0).getDisplayName());
 	}
 
-	@Test
+	//@Test
 	public void countsEmptyTestsCorrectly() throws Exception {
 		Runner runner= Request.aClass(FibonacciTest.class).getRunner();
 		Description description= runner.getDescription();
@@ -97,6 +98,7 @@ public class DependentParameterizedTestTest {
 	    core.addListener(new RunListener() {
 		@Override
 			public void testRunStarted(Description desc){
+			System.out.println(desc);
 			startDesc[0] = desc;
 		}
 	    });
@@ -132,7 +134,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void beforeAndAfterClassAreRun() {
 		fLog= "";
 		JUnitCore.runClasses(BeforeAndAfter.class);
@@ -150,7 +152,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void parametersAreRunAfterBeforeClass() {
 		fLog= "";
 		JUnitCore.runClasses(ParametersOrder.class);
@@ -170,7 +172,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void validateClassCatchesNoParameters() {
 		Result result= JUnitCore.runClasses(EmptyTest.class);
 		assertEquals(1, result.getFailureCount());
@@ -189,7 +191,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void failuresAddedForBadTestMethod() throws Exception {
 		Result result= JUnitCore.runClasses(IncorrectTest.class);
 		assertEquals(1, result.getFailureCount());
@@ -207,7 +209,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void meaningfulFailureWhenParametersNotPublic() throws Exception {
 		Result result= JUnitCore.runClasses(ProtectedParametersTest.class);
 		String expected= String.format(
@@ -228,7 +230,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void meaningfulFailureWhenParameterListsAreNotArrays() {
 		String expected= String.format(
 				"%s.data() must return a Collection of arrays.",
@@ -253,7 +255,7 @@ public class DependentParameterizedTestTest {
 		}
 	}
 
-	@Test(expected=InitializationError.class)
+	//@Test(expected=InitializationError.class)
 	public void exceptionWhenPrivateConstructor() throws Throwable {
 		DependentParameterized dp= new DependentParameterized(PrivateConstructor.class);
 		dp.initParameters();
